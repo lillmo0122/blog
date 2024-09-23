@@ -8,7 +8,8 @@ class connect{
 
   // メンバ変数
   // $dbh にはDBを操作するための情報が入る
-  private $dbh;
+  //protected にすることで、継承したクラスで参照できる
+  protected $dbh;
 
   // コンストラクタ
   // インスタンスが作成されたときに自動的に実行されるメソッド

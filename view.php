@@ -6,8 +6,14 @@
   include 'lib/queryArticle.php';
   include 'lib/article.php';
 
-  $queryArticle = new QueryArticle();
-  $articles = $queryArticle->findAll();
+  if (!empty($_GET['id'])){
+    $id = intval($_GET['id']); // 記事のIDを取得
+
+    $queryArticle = new QueryArticle();
+    $article = $queryArticle->find($id); // 指定記事IDの記事を取得
+  } else {
+    $article = null;
+  }
 ?>
 
 <!doctype html>
@@ -23,19 +29,12 @@
       body {
         padding-top: 5rem;
       }
-      a:link { 
+      .cl-title { 
         color: #CAC2D5;
-      }
-      a:visited {
-        color: #CAC2D5;
-      }
-      a:hover {
-        color: #F1EDF8;
       }
       .bk-set {
         background-color: #9880DA;
       }
-/* a:active { color: #ff8000; } */
       .bd-placeholder-img {
         font-size: 1.125rem;
         text-anchor: middle;
@@ -64,30 +63,24 @@
 <main class="container">
   <div class="row">
     <div class="col-md-8">
-    <?php if ($articles): ?>
-    <?php foreach ($articles as $article): ?>
-        <article class="blog-post">
-          <h2 class="blog-post-title">
-            <a href="view.php?id=<?php echo $article->getId() ?>">
-              <?php echo $article->getTitle() ?>
-            </a>
-          </h2>
-          <p class="blog-post-meta"><?php echo $article->getCreatedAt() ?></p>
-          <?php echo nl2br($article->getBody()) ?>
-        </article>
-    <?php endforeach ?>
-  <?php else: ?>
-        <div class="alert alert-success">
-          <p>記事はありません。</p>
-        </div>
-  <?php endif ?>
+    <?php if ($article): ?>
+      <article class="blog-post">
+        <h2 class="blog-post-title cl-title"><?php echo $article->getTitle() ?></h2>
+        <p class="blog-post-meta"><?php echo $article->getCreatedAt() ?></p>
+        <?php echo nl2br($article->getBody()) ?>
+      </article>
+    <?php else: ?>
+          <div class="alert alert-success">
+            <p>記事はありません。</p>
+          </div>
+    <?php endif ?>
     </div>
 
     <div class="col-md-4">
       <div class="p-4 mb-3 bg-light rounded">
         <h4>ブログについて</h4>
         <p class="mb-0">毎日のなんてことない日常を書いていきます。</p>
-      </div> 
+      </div>
     </div>
 
   </div>
